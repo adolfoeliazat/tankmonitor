@@ -1,27 +1,148 @@
-import React from 'react';
-import {
-  AppRegistry,
-  Text,
-  View,
-  Button,
-} from 'react-native';
-import { StackNavigator } from 'react-navigation';
-
-import LoginScreen from './screens/login-screen';
-
-class HomeScreen extends React.Component {
-  static navigationOptions = {
-    title: 'Welcome',
+/*import React, { Component } from 'react';
+import { Button, Linking, StyleSheet, Text, View, AppRegistry } from 'react-native';
+ 
+import DeepLinking from 'react-native-deep-linking';
+ 
+export default class App extends Component {
+  state = {
+    response: {},
   };
+ 
+  componentDidMount() {
+    DeepLinking.addScheme('example://');
+    Linking.addEventListener('url', this.handleUrl);
+ 
+    DeepLinking.addRoute('/test', (response) => {
+      // example://test 
+      this.setState({ response });
+    });
+ 
+    DeepLinking.addRoute('/test/:id', (response) => {
+      // example://test/23 
+      this.setState({ response });
+    });
+ 
+    DeepLinking.addRoute('/test/:id/details', (response) => {
+      // example://test/100/details 
+      this.setState({ response });
+    });
+ 
+    Linking.getInitialURL().then((url) => {
+      if (url) {
+        Linking.openURL(url);
+      }
+    }).catch(err => console.error('An error occurred', err));
+  }
+ 
+  componentWillUnmount() {
+    Linking.removeEventListener('url', this.handleUrl);
+  }
+ 
+  handleUrl = ({ url }) => {
+    Linking.canOpenURL(url).then((supported) => {
+      if (supported) {
+        DeepLinking.evaluateUrl(url);
+      }
+    });
+  }
+ 
   render() {
-    const {navigate} = this.props.navigation;
-    return (<View><Text>Hello, Navigation!</Text><Button onPress={() => navigate('Login')} title="Click me!"/></View>);
+    return (
+      <View style={styles.container}>
+        <View style={styles.container}>
+          <Button
+            onPress={() => Linking.openURL('example://test')}
+            title="Open example://test"
+          />
+          <Button
+            onPress={() => Linking.openURL('example://test/23')}
+            title="Open example://test/23"
+          />
+          <Button
+            onPress={() => Linking.openURL('example://test/100/details')}
+            title="Open example://test/100/details"
+          />
+        </View>
+        <View style={styles.container}>
+          <Text style={styles.text}>{this.state.response.scheme ? `Url scheme: ${this.state.response.scheme}` : ''}</Text>
+          <Text style={styles.text}>{this.state.response.path ? `Url path: ${this.state.response.path}` : ''}</Text>
+          <Text style={styles.text}>{this.state.response.id ? `Url id: ${this.state.response.id}` : ''}</Text>
+        </View>
+      </View>
+    );
   }
 }
-
-const SimpleApp = StackNavigator({
-  Home: { screen: HomeScreen },
-  Login: {screen: LoginScreen}
+ 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  text: {
+    fontSize: 18,
+    margin: 10,
+  },
 });
+AppRegistry.registerComponent('tankmonitor', () => App);*/
 
-AppRegistry.registerComponent('tankmonitor', () => SimpleApp);
+
+// import React, { 
+//     Component 
+// } from 'react';
+// import {
+//   AppRegistry,
+//   Text
+// } from 'react-native';
+// import {
+//   StackNavigator
+// } from 'react-navigation';
+
+// import SCREENS from './screens/index';
+
+// const TankMonitorApp = StackNavigator({
+//   Login: {screen: SCREENS.LoginScreen},
+//   ForgotPassword: {screen: SCREENS.ForgotPassword},
+//   GatewaySetup: {screen: SCREENS.GatewaySetup},
+//   SensorSetup: {screen: SCREENS.SensorSetup},
+//   CayenneApiLogin: {screen: SCREENS.CayenneApiLogin}
+// });
+
+//  AppRegistry.registerComponent('tankmonitor', () => TankMonitorApp);
+
+
+
+
+
+
+
+
+// import React from 'react';
+// import {
+//   AppRegistry,
+//   Text,
+//   View,
+//   Button,
+// } from 'react-native';
+// import { StackNavigator } from 'react-navigation';
+
+// import LoginScreen from './screens/login-screen';
+
+// class HomeScreen extends React.Component {
+//   static navigationOptions = {
+//     title: 'Welcome',
+//   };
+//   render() {
+//     const {navigate} = this.props.navigation;
+//     return (<View><Text>Hello, Navigation!</Text><Button onPress={() => navigate('Login')} title="Click me!"/></View>);
+//   }
+// }
+
+// const SimpleApp = StackNavigator({
+//   Login: {screen: LoginScreen},
+//   Home: { screen: HomeScreen }
+  
+// });
+
+// AppRegistry.registerComponent('tankmonitor', () => SimpleApp);
+
