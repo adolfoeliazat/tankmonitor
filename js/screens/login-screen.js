@@ -2,15 +2,11 @@ import React, {
     Component 
 } from 'react';
 import {
-  AppRegistry,
   Text,
-  TextInput,
   View,
-  Button,
   TouchableOpacity,
   Image,
   Modal,
-  StyleSheet,
   Linking,
   Navigator,
   Platform
@@ -25,37 +21,7 @@ import TouchButton from '../components/Button/index';
 import authService from '../lib/authentication';
 import CONFIG from '../config/index';
 import STYLES from '../components/common-styles';
-
-const styles = StyleSheet.create({
-    linkText: {
-        marginTop:1,
-        padding:5,
-        textAlign:'center',
-        backgroundColor: 'transparent',
-        fontSize:16,
-        color:'white',
-        textDecorationLine:'underline',
-        textDecorationStyle:'solid'
-    },
-    backgroundImageContainer:{
-        flex: 1,
-        resizeMode:'stretch',
-        width: undefined,
-        height: undefined,
-        backgroundColor: 'transparent',
-        justifyContent: 'center'
-    },
-    modalText:{
-        marginLeft:10,
-        marginRight:10,
-        marginTop:5,
-        marginBottom:2,
-        padding:15,
-        textAlign:'center',
-        fontSize:24,
-        color:'black'
-    }
-    });
+import TextBox from '../components/TextBox/index';
 
 class LoginScreen extends Component{
     static navigationOptions = {header: null};
@@ -90,6 +56,7 @@ class LoginScreen extends Component{
 
     navigate = (url) => {
         const { navigate } = this.props.navigation;
+        if (_.isNil(url)) return;
         const route = url.replace(/.*?:\/\//g, '');
         const routeName = route.split('/')[0];
         var accessToken = routeName.match(/access_token=(.*?)&/i)[1];
@@ -97,11 +64,14 @@ class LoginScreen extends Component{
 
         if (_.isNil(accessToken) || _.isNil(state)) return;
 
+        console.log(state);
+        console.log(CONFIG.settings.state);
         if (state.toString() !== CONFIG.settings.state) {
             console.log('Wrong state received!');
             return;
         }
         console.log(accessToken);
+        CONFIG.session.access_token = accessToken;
         navigate('GatewaySetup');
     }
 
@@ -110,13 +80,17 @@ class LoginScreen extends Component{
      */
     cayenneApi =() => {
         // Create state value
-        CONFIG.settings.state = CONFIG.settings.guid();
 
-        Linking.openURL(CONFIG.settings.getLoginUri())
-            .then(supported => {
-                if (!supported) { console.log('Not supported: ' + url); }
-                else return Linking.openURL(CONFIG.settings.getLoginUri());
-            }).catch(err => console.error('Error: ', err));
+        const { navigate } = this.props.navigation;
+        navigate('GatewaySetup');
+
+        // CONFIG.settings.state = CONFIG.settings.guid();
+
+        // Linking.openURL(CONFIG.settings.getLoginUri())
+        //     .then(supported => {
+        //         if (!supported) { console.log('Not supported: ' + url); }
+        //         else return Linking.openURL(CONFIG.settings.getLoginUri());
+        //     }).catch(err => console.error('Error: ', err));
     }
 
     /**
@@ -142,7 +116,7 @@ class LoginScreen extends Component{
     render(){
         const {navigate} = this.props.navigation;
         return(
-                <Image style={styles.backgroundImageContainer} source={CONFIG.images.loginSplash}>
+                <Image style={STYLES.backgroundImageContainer} source={CONFIG.images.loginSplash}>
                     <Modal
                         onRequestClose={() => navigate('ForgotPassword')}
                         animationType={'fade'}
@@ -152,11 +126,11 @@ class LoginScreen extends Component{
                         <View style={{backgroundColor:'#000A', flex:0.3}}>
                             <View style={{paddingBottom:20, margin:20, justifyContent:'center', alignItems:'center', backgroundColor:'white', borderRadius:5}}>
                                 <View>
-                                    <Text style={styles.modalText}>Wrong Username/Password!</Text>
+                                    <Text style={STYLES.modalText}>Wrong Username/Password!</Text>
 
                                     <TouchableOpacity activeOpacity={0.8} onPress={() => {
                                         this.setModalVisible(!this.state.modalVisible)}}>
-                                        <Text style={styles.buttonText}>OK</Text>
+                                        <Text style={STYLES.buttonText}>OK</Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>
@@ -167,9 +141,14 @@ class LoginScreen extends Component{
                     <View style={{flex:0.05}}/>
                     <View style={{flex:0.4, justifyContent:'flex-start'}}>
                         <Image style={{margin:50, backgroundColor:'transparent'}} source={CONFIG.images.logo}/>
-                        
-                        <TextInput style={STYLES.inputField} onChangeText={(text) => this.setState({username: text})} placeholder='Username' />
-                        <TextInput secureTextEntry={true} style={STYLES.inputField} onChangeText={(text) => this.setState({password: text})} placeholder='Password' />
+
+                        <TextBox
+                            onChangeText={(text) => this.setState({username: text})}
+                            placeholder = 'Username'/>
+                        <TextBox
+                            onChangeText={(text) => this.setState({password: text})}
+                            placeholder = 'Password'
+                            secureTextEntry={true}/>
 
                         <TouchButton
                             title = 'Sign In'
@@ -189,7 +168,7 @@ class LoginScreen extends Component{
 
                         <TouchableOpacity 
                             onPress = {() => navigate('ForgotPassword')}
-                            title = "Forgot Passord?"><Text style={styles.linkText}>Forgot password?</Text>
+                            title = "Forgot Passord?"><Text style={STYLES.linkText}>Forgot password?</Text>
                         </TouchableOpacity>
 
                     </View>

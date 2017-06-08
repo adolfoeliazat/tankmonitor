@@ -13,5 +13,5 @@ export default ROUTES = StackNavigator({
   ForgotPassword: {screen: SCREENS.ForgotPassword},
   GatewaySetup: {screen: SCREENS.GatewaySetup},
   SensorSetup: {screen: SCREENS.SensorSetup},
-  CayenneApiLogin: {screen: SCREENS.CayenneApiLogin}
+  Status: {screen: SCREENS.Status}
 });

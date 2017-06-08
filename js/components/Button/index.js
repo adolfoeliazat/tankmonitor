@@ -11,7 +11,8 @@ function Button(props) {
         <TouchableOpacity
             onPress = {props.onPress}
             title = {props.title}
-            activeOpacity = {props.activeOpacity}>
+            activeOpacity = {props.activeOpacity}
+            style = {props.buttonStyle}>
             <Text style={[styles.buttonText, props.style]}>
                 {props.children}</Text>
         </TouchableOpacity>

@@ -2,7 +2,8 @@ import settings from '../config/settings';
 
 // Methods
 var Service = {
-    getToken: getToken
+    getToken: getToken,
+    forgotPassword: forgotPassword
 }
 
 function getHost() {
@@ -17,6 +18,7 @@ function getHeaders() {
 }
 
 /**
+ * Requests an oauth token using email/password
  * 
  * @param {String} email 
  * @param {String} password 
@@ -29,9 +31,6 @@ function getToken(email, password) {
             email: email,
             password: password,
             grant_type: 'password',
-            //grant_type: 'authorization_code',
-            client_id: 'bb359186-f21e-4937-a241-e4af652a6907',
-            //code: 'c7a150a5-899c-4c8c-9bd8-ed50b363d0e4'
         })
     })
     .then((response) => {
@@ -41,6 +40,29 @@ function getToken(email, password) {
         console.error(error);
         throw error;
     })
+}
+
+/**
+ * Sends a forgot password request to authorization host
+ * 
+ * @param {String} email
+ */
+function forgotPassword(email) {
+    // Too easy to get Tokens for any known emails and reset password...
+    console.log('Probably don`t add this...');
+    // return fetch(getHost() + 'password/forgot', {
+    //     method: 'POST',
+    //     headers: getHeaders(),
+    //     body: JSON.stringify({
+    //         email: email
+    //     })
+    // })
+    // .then((response) => {
+    //     return response.json();
+    // })
+    // .catch((error) => {
+    //     throw error;
+    // })
 }
 
 export default Service;
