@@ -9,9 +9,11 @@ import {
 import {
   StackNavigator
 } from 'react-navigation';
+import {
+    TouchButton,
+    TextBox
+} from './../components/index';
 import Hr from 'react-native-hr';
-import TouchButton from '../components/Button/index';
-import TextBox from '../components/TextBox/index';
 import STYLES from './../components/common-styles';
 
 class SensorSetup extends Component {

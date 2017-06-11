@@ -8,7 +8,9 @@ import {
 import {
   StackNavigator
 } from 'react-navigation';
-import TextBox from './../components/TextBox/index';
+import {
+    TextBox
+} from './../components/index';
 import STYLES from './../components/common-styles';
 import Hr from 'react-native-hr';
 

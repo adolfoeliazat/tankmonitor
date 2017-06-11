@@ -6,10 +6,20 @@ var Service = {
     forgotPassword: forgotPassword
 }
 
+/**
+ * Get the authorization host
+ * 
+ * @returns {String}
+ */
 function getHost() {
     return settings.authHost;
 }
 
+/**
+ * Get the headers used for API calls
+ * 
+ * @returns {*}
+ */
 function getHeaders() {
     return {
         'Accept': 'application/json',
@@ -37,7 +47,6 @@ function getToken(email, password) {
         return response.json();
     })
     .catch((error) => {
-        console.error(error);
         throw error;
     })
 }
@@ -48,21 +57,19 @@ function getToken(email, password) {
  * @param {String} email
  */
 function forgotPassword(email) {
-    // Too easy to get Tokens for any known emails and reset password...
-    console.log('Probably don`t add this...');
-    // return fetch(getHost() + 'password/forgot', {
-    //     method: 'POST',
-    //     headers: getHeaders(),
-    //     body: JSON.stringify({
-    //         email: email
-    //     })
-    // })
-    // .then((response) => {
-    //     return response.json();
-    // })
-    // .catch((error) => {
-    //     throw error;
-    // })
+    return fetch(getHost() + 'password/forgot', {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify({
+            email: email
+        })
+    })
+    .then((response) => {
+        return response.json();
+    })
+    .catch((error) => {
+        throw error;
+    })
 }
 
 export default Service;

@@ -1,16 +1,19 @@
 import React, { 
-    Component 
+    Component
 } from 'react';
 import {
   Text,
   View,
   TouchableOpacity,
   Image,
+  Modal
 } from 'react-native';
 import _ from 'lodash';
-
-import TouchButton from '../components/Button/index';
-import TextBox from '../components/TextBox/index';
+import {
+    TouchButton,
+    TextBox,
+    ModalBox
+} from './../components/index';
 import authService from '../lib/authentication';
 import CONFIG from '../config/index';
 import STYLES from '../components/common-styles';
@@ -21,29 +24,39 @@ class ForgotPassword extends Component {
     constructor() {
         super();
         this.state = {
-            email: ''
+            email: '',
+            modalVisible: false
         };
         this.forgotPassword = this.forgotPassword.bind(this);
     }
 
     forgotPassword = () => {
         const {navigate } = this.props.navigation;
-        const { email } = this.state;
+        const { email, modalVisible } = this.state;
 
-        // authService.forgotPassword(email.trim()).then(function(response) {
-        //     if (!_.isEmpty(response)) {
-        //         console.log(response);
-        //     }
-        // }).catch(function(error) {
-        //     console.log('API error');
-        //     alert(error.message);
-        // })
+        if (email.search('@') === -1) return; 
+
+        this.setState({ modalVisible: true });
+        authService.forgotPassword(email.trim()).then(function(response) {
+            console.log(response);
+        }).catch(function(error) {
+            alert(error.message);
+        })
     }
 
     render() {
         const {navigate} = this.props.navigation;
         return (
                 <Image style={STYLES.backgroundImageContainer} source={CONFIG.images.loginSplash}>
+                    <ModalBox
+                        onRequestClose={() => navigate('Login')}
+                        isVisible={this.state.modalVisible}
+                        modalText='You`ll receive an email shortly if you entered a valid email.'
+                        title='OK'
+                        onPress={() => {this.setState({modalVisible: false})}}
+                        buttonText='OK'>
+                    </ModalBox>
+
                     <View style={{
                         flex: 0.5,
                         flexDirection: 'column',

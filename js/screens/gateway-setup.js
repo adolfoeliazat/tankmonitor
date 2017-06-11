@@ -9,10 +9,13 @@ import {
 import {
   StackNavigator
 } from 'react-navigation';
+import {
+    TouchButton,
+    TextBox
+} from './../components/index';
 import Hr from 'react-native-hr';
 import STYLES from './../components/common-styles';
-import TouchButton from '../components/Button/index';
-import TextBox from '../components/TextBox/index';
+import CONFIG from './../config/index';
 
 class GatewaySetup extends Component {
     static navigationOptions = {header: null};
@@ -24,38 +27,14 @@ class GatewaySetup extends Component {
             gatewayId: '',
             location: '',
             showInitHeader: true,
-            showErrorHeader: false,
-
-
-
-            dummyCount: 0
+            showErrorHeader: false
         };
         this.addGateway = this.addGateway.bind(this);
     }
 
     addGateway = () => {
         const { navigate } = this.props.navigation;
-        let { showInitHeader, showErrorHeader, gatewayName, gatewayId, location, dummyCount} = this.state;
-
-
-        console.log(gatewayName);
-        console.log(gatewayId);
-        console.log(location);
-
-
-
-        dummyCount++;
-        if (dummyCount > 2) dummyCount = 0;
-        this.setState({dummyCount: dummyCount});
-        console.log(dummyCount);
-
-        if (dummyCount === 0) this.setState({showInitHeader: true});
-        if (dummyCount === 1) this.setState({
-            showInitHeader: false,
-            showErrorHeader: false
-        });
-        if (dummyCount === 2) this.setState({showErrorHeader: true});
-
+        let { showInitHeader, showErrorHeader, gatewayName, gatewayId, location} = this.state;
 
         navigate('SensorSetup')
         // Add gateway POST call here

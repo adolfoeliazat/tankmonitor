@@ -37,7 +37,7 @@ export default StyleSheet.create({
         marginBottom:2,
         padding:15,
         textAlign:'center',
-        fontSize:24,
+        fontSize:18,
         color:'black'
     },
     screenText: {

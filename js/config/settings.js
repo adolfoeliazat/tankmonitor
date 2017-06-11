@@ -23,7 +23,7 @@ const settings = {
  * @returns {String}
  */
 function getLoginUri() {
-    return CONFIG.settings.authHost + 'oauth/authorization?redirect_uri=' + CONFIG.settings.redirect_uri + '&client_id=' + CONFIG.settings.appKey + '&state=' + settings.state + '&response_type=token';
+    return settings.authHost + 'oauth/authorization?redirect_uri=' + settings.redirect_uri + '&client_id=' + settings.appKey + '&state=' + settings.state + '&response_type=token';
 }
 
 /**
@@ -40,4 +40,3 @@ function guid() {
 }
 
 export default settings;
-

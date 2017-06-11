@@ -17,11 +17,19 @@ import {
 import DeepLinking from 'react-native-deep-linking';
 import _ from 'lodash';
 
-import TouchButton from '../components/Button/index';
+import {
+    TouchButton,
+    TextBox,
+    ModalBox
+} from './../components/index';
+
+import {createIconSetFromFontello} from 'react-native-vector-icons';
+import config from '../config/config.json';
+let Icon = createIconSetFromFontello(config);
+
 import authService from '../lib/authentication';
 import CONFIG from '../config/index';
 import STYLES from '../components/common-styles';
-import TextBox from '../components/TextBox/index';
 
 class LoginScreen extends Component{
     static navigationOptions = {header: null};
@@ -33,13 +41,10 @@ class LoginScreen extends Component{
             password: '',
             modalVisible: false
         };
-        this.setModalVisible = this.setModalVisible.bind(this);
         this.cayenneLogin = this.cayenneLogin.bind(this);
-        this.cayenneApi = this.cayenneApi.bind(this);
-    }
-
-    setModalVisible(visible) {
-        this.setState({modalVisible: visible});
+        this.cayenneApi = _.debounce(this.cayenneApi.bind(this), 1000, {leading: true});
+        CONFIG.session.access_token = '';
+        CONFIG.session.refresh_token = '';
     }
 
     componentDidMount() {
@@ -64,51 +69,46 @@ class LoginScreen extends Component{
 
         if (_.isNil(accessToken) || _.isNil(state)) return;
 
-        console.log(state);
-        console.log(CONFIG.settings.state);
         if (state.toString() !== CONFIG.settings.state) {
             console.log('Wrong state received!');
             return;
         }
-        console.log(accessToken);
         CONFIG.session.access_token = accessToken;
         navigate('GatewaySetup');
     }
 
     /**
-     * Cayenne API Login using APP Key
+     * Cayenne API Login using app id
+     * This will redirect to the authorization page and will use the redirect link provdided
+     * This is using implicit flow and deep linking to return to app with access token
      */
     cayenneApi =() => {
-        // Create state value
 
-        const { navigate } = this.props.navigation;
-        navigate('GatewaySetup');
+        // const { navigate } = this.props.navigation;
+        // navigate('GatewaySetup');
 
-        // CONFIG.settings.state = CONFIG.settings.guid();
+        CONFIG.settings.state = CONFIG.settings.guid();
 
-        // Linking.openURL(CONFIG.settings.getLoginUri())
-        //     .then(supported => {
-        //         if (!supported) { console.log('Not supported: ' + url); }
-        //         else return Linking.openURL(CONFIG.settings.getLoginUri());
-        //     }).catch(err => console.error('Error: ', err));
+        Linking.openURL(CONFIG.settings.getLoginUri())
+            .then(supported => {})
+            .catch(err => console.error('Error: ', err));
     }
 
     /**
-     * Standard Cayenne login
+     * Standard Cayenne login using email/password
      */
     cayenneLogin = () => {
         const { navigate } = this.props.navigation;
-        const { username, password} = this.state;
-        const { setModalVisible } = this.setModalVisible;
-
+        const { username, password, modalVisible } = this.state;
+        var vm = this;
         var email = username.trim();
+
         authService.getToken(email, password).then(function(response) {
-            if (response.statusCode === 400) console.log('Wrong email/password');
-            else {
-                console.log('Success!');
-            }
+            if (response.statusCode >= 400) vm.setState({ modalVisible: true });
+            CONFIG.session.access_token = response.access_token;
+            CONFIG.session.refresh_token = response.refresh_token;
+            navigate('GatewaySetup');
         }).catch(function (error) {
-            console.log('API error');
             alert(error.message);
         });
     }
@@ -117,29 +117,17 @@ class LoginScreen extends Component{
         const {navigate} = this.props.navigation;
         return(
                 <Image style={STYLES.backgroundImageContainer} source={CONFIG.images.loginSplash}>
-                    <Modal
-                        onRequestClose={() => navigate('ForgotPassword')}
-                        animationType={'fade'}
-                        transparent={true}
-                        visible={this.state.modalVisible} style={{justifyContent:'center', alignItems:'center'}}>
-                        <View style={{flex:0.3, backgroundColor:'#000A'}}/>
-                        <View style={{backgroundColor:'#000A', flex:0.3}}>
-                            <View style={{paddingBottom:20, margin:20, justifyContent:'center', alignItems:'center', backgroundColor:'white', borderRadius:5}}>
-                                <View>
-                                    <Text style={STYLES.modalText}>Wrong Username/Password!</Text>
-
-                                    <TouchableOpacity activeOpacity={0.8} onPress={() => {
-                                        this.setModalVisible(!this.state.modalVisible)}}>
-                                        <Text style={STYLES.buttonText}>OK</Text>
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                        </View>
-                        <View style={{flex:0.4, backgroundColor:'#000A'}}/>
-                    </Modal>
+                    <ModalBox
+                        onRequestClose={() => navigate('Login')}
+                        isVisible={this.state.modalVisible}
+                        modalText='Wrong email or password!'
+                        title='OK'
+                        onPress={() => {this.setState({modalVisible: false})}}
+                        buttonText='OK'>
+                    </ModalBox>
 
                     <View style={{flex:0.05}}/>
-                    <View style={{flex:0.4, justifyContent:'flex-start'}}>
+                    <View style={{flex:1, justifyContent:'flex-start'}}>
                         <Image style={{margin:50, backgroundColor:'transparent'}} source={CONFIG.images.logo}/>
 
                         <TextBox
@@ -157,22 +145,22 @@ class LoginScreen extends Component{
                                 Sign In
                         </TouchButton>
 
-                        <TouchButton
-                            title = 'Cayenne API Login'
-                            onPress = {() => {this.cayenneApi()}}
-                            activeOpacity={0.8}
-                            image={CONFIG.images.appIcon}
-                            style={{ backgroundColor: '#5cb85c' }}>
-                                Cayenne API Login
-                        </TouchButton>
-
                         <TouchableOpacity 
                             onPress = {() => navigate('ForgotPassword')}
                             title = "Forgot Passord?"><Text style={STYLES.linkText}>Forgot password?</Text>
                         </TouchableOpacity>
 
+                        <View style={{
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            marginTop: 10
+                        }}>                        
+                            <Icon.Button name="cayenne" color="#5bc0de" backgroundColor='#FFFFFF' onPress = {() => {this.cayenneApi()}}>
+                                <Text style={{fontFamily: 'Arial', fontSize: 15}}>Login with `Your Cayenne App Name`</Text>
+                            </Icon.Button>
+                        </View>
                     </View>
-                    <View style={{flex:0.5}}/>
+                    <View style={{flex:0.05}}/>
                 </Image>
         );
     }
