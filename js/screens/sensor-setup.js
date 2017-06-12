@@ -5,6 +5,7 @@ import {
   Text,
   View,
   TouchableOpacity,
+  ScrollView
 } from 'react-native';
 import {
   StackNavigator
@@ -12,12 +13,18 @@ import {
 import {
   TouchButton,
   TextBox,
-  CommonStyles
+  CommonStyles,
+  Instructions,
+  Header
 } from './../components/index';
 import {
   ThingsSerivce
 } from './../lib/index';
+import { 
+  IMAGES
+} from './../config/index.js'
 import Hr from 'react-native-hr';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 class SensorSetup extends Component {
   static navigationOptions = {header: null};
@@ -31,8 +38,12 @@ class SensorSetup extends Component {
       max: '',
       unit: '',
       location: '',
-      gateway: props.navigation.state.params.gateway
+      gateway: props.navigation.state.params.gateway,
+      showInstructions: false
     };
+    this.instructions = ['Take sensor to walk-in cooler, freezer and food prep areas.',
+                        'Peel off sticker and place in walk-in, cooler, freezer and food prep areas to monitor.'];
+    this.instructionsImages = [IMAGES.elsysSensor, IMAGES.gatewayPlacement];
     this.addSensor = this.addSensor.bind(this);
   }
 
@@ -50,76 +61,68 @@ class SensorSetup extends Component {
 
     sensorId = 'a5f336a8-8c18-11e6-ae22-56b6b6499611';
 
-    let thing = {};
-    thing.name = sensorName;
-    thing.device_type_id = sensorId;  // Is device tye id === sensor id ?
-    thing.parent_id = gateway.id;
-    thing.properties = {
-      channel: 0
-    }
-    thing.active = 1;
-    thing.status = 'ACTIVATED';
+    return navigate('Status');
 
-    ThingsSerivce.addThing(thing).then(function(response) {
-      if (response.statusCode >= 400) return;
-      return navigate('Status');
-    });
+
+    // let thing = {};
+    // thing.name = sensorName;
+    // thing.device_type_id = sensorId;  // Is device tye id === sensor id ?
+    // thing.parent_id = gateway.id;
+    // thing.properties = {
+    //   channel: 0
+    // }
+    // thing.active = 1;
+    // thing.status = 'ACTIVATED';
+
+    // ThingsSerivce.addThing(thing).then(function(response) {
+    //   if (response.statusCode >= 400) return;
+    //   return navigate('Status');
+    // });
+  }
+
+  handleInstruction = () => {
+      const { showInstructions } = this.state;
+      this.setState({showInstructions: !showInstructions});
   }
 
   render() {
+    const {navigate} = this.props.navigation;
     return (
-      <View style={CommonStyles.background}>
-            <View style={{
-                flex: .05,
-                justifyContent: 'center',
-                flexDirection: 'column',
-                alignItems: 'center',
-                margin: 5
-            }}>
-                <Text style={[CommonStyles.white, CommonStyles.textHeader ]}>SET UP SENSOR</Text>
-            </View>
-            <View style={{
-                flex: 0.05
-            }}>
-                <Text style={{
-                    color: 'white',
-                    position: 'absolute',
-                    left: 0
-                }}>Sensor Setup</Text>
-                <Text style={{
-                    color: 'steelblue',
-                    position: 'absolute',
-                    right: 0
-                }}>View Intructions</Text>
-            </View>
-
-            <Hr lineColor='#b3b3b3' textColor='steelblue' />
+      <ScrollView style={[CommonStyles.background, {flex: 1}]}>
+            <Header title='SET UP SENSOR' navigation={this.props.navigation} visible={false}/>
+            <Instructions
+                show={this.state.showInstructions}
+                title='Sensor Setup'
+                onPress = {() => {this.handleInstruction()}}
+                instructions={this.instructions}
+                instructionsImages={this.instructionsImages}
+            />
 
             <View style={{
                 flex: 0.75
             }}>
                 <TextBox
-                  style={{height: 45}}
+                  style={{height: 50}}
                   onChangeText = {(text) => this.setState({sensorName: text})}
                   placeholder='Sensor Name' />
                 <TextBox
-                  style={{height: 45}}
+                  style={{height: 50}}
                   onChangeText = {(text) => this.setState({sensordId: text})} 
                   placeholder='Sensor ID' />
                 <TextBox
-                  style={{height: 45}}
+                  style={{height: 50}}
                   onChangeText = {(text) => this.setState({min: text})} 
                   placeholder='Min' />
                 <TextBox
-                  style={{height: 45}}
+                  style={{height: 50}}
                   onChangeText = {(text) => this.setState({max: text})} 
                   placeholder='Max' />
                 <TextBox
-                  style={{height: 45}}
+                  style={{height: 50}}
                   onChangeText = {(text) => this.setState({unit: text})} 
                   placeholder='Unit' />
                 <TextBox
-                  style={{height: 45}}
+                  style={{height: 50}}
                   onChangeText = {(text) => this.setState({location: text})} 
                   placeholder='Location' />
             </View>
@@ -133,7 +136,7 @@ class SensorSetup extends Component {
                         ADD
                 </TouchButton>
             </View>
-      </View>
+      </ScrollView>
     )
   }
 }

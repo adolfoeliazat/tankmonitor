@@ -4,7 +4,8 @@ import React, {
 import {
     Text,
     View,
-    TouchableOpacity
+    TouchableOpacity,
+    ScrollView
 } from 'react-native';
 import {
     StackNavigator
@@ -12,13 +13,18 @@ import {
 import {
     TouchButton,
     TextBox,
-    CommonStyles
+    CommonStyles,
+    Instructions
 } from './../components/index';
 import {
     ThingsSerivce
 } from './../lib/index';
+import {
+    IMAGES
+} from './../config/index';
 import Hr from 'react-native-hr';
 import _ from 'lodash';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 class GatewaySetup extends Component {
     static navigationOptions = {header: null};
@@ -30,8 +36,12 @@ class GatewaySetup extends Component {
             gatewayId: '',
             location: '',
             showInitHeader: true,
-            showErrorHeader: false
+            showErrorHeader: false,
+            showInstructions: false
         };
+        this.instructions = ['After connecting the Micro-USB and Ethernet cable, check that the POWER light is red and CONN light is orange.',
+                            'Place within 200ft of walk-in, cooler, freezer or food prep area.'];
+        this.instructionsImages = [IMAGES.gatewaySetup, IMAGES.gatewayPlacement];
         this.addGateway = _.debounce(this.addGateway.bind(this), 1000, {leading: true});
     }
 
@@ -42,17 +52,19 @@ class GatewaySetup extends Component {
 
         gatewayId = '4883C7DF3001191D';
 
-        vm.setState({showInitHeader: false});
-        ThingsSerivce.pairGateway(gatewayName, gatewayId).then(function(response) {
-            if (response.statusCode >= 400) {
-                vm.setState({showErrorHeader: true, showInitHeader: false});
-                setTimeout(() => {
-                    vm.setState({showErrorHeader: false, showInitHeader: true});
-                }, 2000);
-                return;
-            }
-            return navigate('SensorSetup', screenProps = {gateway: response});
-        })
+        return navigate('SensorSetup', screenProps = {gateway: 'hello'});
+
+        // vm.setState({showInitHeader: false});
+        // ThingsSerivce.pairGateway(gatewayName, gatewayId).then(function(response) {
+        //     if (response.statusCode >= 400) {
+        //         vm.setState({showErrorHeader: true, showInitHeader: false});
+        //         setTimeout(() => {
+        //             vm.setState({showErrorHeader: false, showInitHeader: true});
+        //         }, 2000);
+        //         return;
+        //     }
+        //     return navigate('SensorSetup', screenProps = {gateway: response});
+        // })
     }
 
     getHeader = () => {
@@ -64,9 +76,11 @@ class GatewaySetup extends Component {
                     justifyContent: 'center',
                     flexDirection: 'column',
                     alignItems: 'center',
-                    margin: 5
+                    margin: 10
                 }}>
                     <Text style={[CommonStyles.white, CommonStyles.textHeader ]}>SET UP GATEWAY</Text>
+
+                    <Icon name="question-circle-o" size={20} color="#FFF" style={{position: 'absolute', left: 0}}/>
                 </View>
             );
         if (!showInitHeader && !showErrorHeader)
@@ -105,38 +119,38 @@ class GatewaySetup extends Component {
             );
     }
 
+    handleInstruction = () => {
+        const { showInstructions } = this.state;
+        this.setState({showInstructions: !showInstructions});
+    }
+
     render() {
         return (
-            <View style={CommonStyles.background}>
+            <ScrollView style={[CommonStyles.background, {flex: 1}]}>
+
                 {this.getHeader()}
 
-                <View style={{
-                    flex: 0.05
-                }}>
-                    <Text style={{
-                        color: 'white',
-                        position: 'absolute',
-                        left: 0
-                    }}>Gateway Setup</Text>
-                    <Text style={{
-                        color: 'steelblue',
-                        position: 'absolute',
-                        right: 0
-                    }}>View Intructions</Text>
-                </View>
-
-                <Hr lineColor='#b3b3b3' textColor='steelblue' />
+                <Instructions
+                    show={this.state.showInstructions}
+                    title='Gateway Setup'
+                    onPress = {() => {this.handleInstruction()}}
+                    instructions={this.instructions}
+                    instructionsImages={this.instructionsImages}
+                />
 
                 <View style={{
                     flex: 0.75
                 }}>
                     <TextBox
+                        style={{height: 50}}
                         onChangeText = {(text) => this.setState({gatewayName: text})}
                         placeholder = 'Gateway Name'/>
-                    <TextBox 
+                    <TextBox
+                        style={{height: 50}}
                         onChangeText = {(text) => this.setState({gatewayId: text})} 
                         placeholder='Gateway ID' />
-                    <TextBox 
+                    <TextBox
+                        style={{height: 50}}
                         onChangeText = {(text) => this.setState({location: text})} 
                         placeholder='Location' />
                 </View>
@@ -150,7 +164,7 @@ class GatewaySetup extends Component {
                             ADD GATEWAY
                     </TouchButton>
                 </View>
-            </View>
+            </ScrollView>
         );
     }
 }

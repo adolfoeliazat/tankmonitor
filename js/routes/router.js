@@ -13,5 +13,7 @@ export default ROUTES = StackNavigator({
   ForgotPassword: {screen: SCREENS.ForgotPassword},
   GatewaySetup: {screen: SCREENS.GatewaySetup},
   SensorSetup: {screen: SCREENS.SensorSetup},
-  Status: {screen: SCREENS.Status}
+  Status: {screen: SCREENS.Status},
+  Alerts: {screen: SCREENS.Alerts},
+  SensorMap: {screen: SCREENS.SensorMap}
 });

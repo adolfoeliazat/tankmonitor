@@ -105,6 +105,8 @@ class LoginScreen extends Component{
         const { username, password, modalVisible } = this.state;
         var email = username.trim();
 
+        return navigate('GatewaySetup');
+
         if (email.search('@') === -1 || email === '' || password === '') return;
 
         AuthService.getToken(email, password).then(function(response) {
@@ -174,7 +176,7 @@ class LoginScreen extends Component{
                             marginTop: 10
                         }}>                        
                             <Icon.Button name="cayenne" color="#5bc0de" backgroundColor='#FFFFFF' onPress = {() => {this.cayenneApi()}}>
-                                <Text style={{fontFamily: 'Arial', fontSize: 15}}>Login with `Your Cayenne App Name`</Text>
+                                <Text style={{fontFamily: 'Arial', fontSize: 15}}>Cayenne Implicit Login</Text>
                             </Icon.Button>
                         </View>
                     </View>
