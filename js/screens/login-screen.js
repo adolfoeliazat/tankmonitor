@@ -2,34 +2,39 @@ import React, {
     Component 
 } from 'react';
 import {
-  Text,
-  View,
-  TouchableOpacity,
-  Image,
-  Modal,
-  Linking,
-  Navigator,
-  Platform
+    Text,
+    View,
+    TouchableOpacity,
+    Image,
+    Modal,
+    Linking,
+    Navigator,
+    Platform
 } from 'react-native';
 import {
-  StackNavigator
+    StackNavigator
 } from 'react-navigation';
 import DeepLinking from 'react-native-deep-linking';
 import _ from 'lodash';
-
 import {
     TouchButton,
     TextBox,
-    ModalBox
+    ModalBox,
+    CommonStyles
 } from './../components/index';
+import {
+    AuthService,
+    ThingsSerivce
+} from './../lib/index';
+import {
+    SESSION,
+    SETTINGS,
+    IMAGES
+} from './../config/index';
 
 import {createIconSetFromFontello} from 'react-native-vector-icons';
 import config from '../config/config.json';
 let Icon = createIconSetFromFontello(config);
-
-import authService from '../lib/authentication';
-import CONFIG from '../config/index';
-import STYLES from '../components/common-styles';
 
 class LoginScreen extends Component{
     static navigationOptions = {header: null};
@@ -41,10 +46,11 @@ class LoginScreen extends Component{
             password: '',
             modalVisible: false
         };
-        this.cayenneLogin = this.cayenneLogin.bind(this);
+        this.cayenneLogin = _.debounce(this.cayenneLogin.bind(this));
         this.cayenneApi = _.debounce(this.cayenneApi.bind(this), 1000, {leading: true});
-        CONFIG.session.access_token = '';
-        CONFIG.session.refresh_token = '';
+        this.getThings = this.getThings.bind(this);
+        SESSION.access_token = '';
+        SESSION.refresh_token = '';
     }
 
     componentDidMount() {
@@ -69,12 +75,12 @@ class LoginScreen extends Component{
 
         if (_.isNil(accessToken) || _.isNil(state)) return;
 
-        if (state.toString() !== CONFIG.settings.state) {
+        if (state.toString() !== SETTINGS.state) {
             console.log('Wrong state received!');
             return;
         }
-        CONFIG.session.access_token = accessToken;
-        navigate('GatewaySetup');
+        SESSION.access_token = accessToken;
+        this.getThings();
     }
 
     /**
@@ -83,40 +89,52 @@ class LoginScreen extends Component{
      * This is using implicit flow and deep linking to return to app with access token
      */
     cayenneApi =() => {
+        SETTINGS.state = SETTINGS.guid();
 
-        // const { navigate } = this.props.navigation;
-        // navigate('GatewaySetup');
-
-        CONFIG.settings.state = CONFIG.settings.guid();
-
-        Linking.openURL(CONFIG.settings.getLoginUri())
+        Linking.openURL(SETTINGS.getLoginUri())
             .then(supported => {})
             .catch(err => console.error('Error: ', err));
     }
 
     /**
-     * Standard Cayenne login using email/password
+     * Standard Cayenne login using email & password
      */
     cayenneLogin = () => {
+        var vm = this;
         const { navigate } = this.props.navigation;
         const { username, password, modalVisible } = this.state;
-        var vm = this;
         var email = username.trim();
 
-        authService.getToken(email, password).then(function(response) {
-            if (response.statusCode >= 400) vm.setState({ modalVisible: true });
-            CONFIG.session.access_token = response.access_token;
-            CONFIG.session.refresh_token = response.refresh_token;
-            navigate('GatewaySetup');
+        if (email.search('@') === -1 || email === '' || password === '') return;
+
+        AuthService.getToken(email, password).then(function(response) {
+            if (response.statusCode >= 400) {
+                vm.setState({ modalVisible: true });
+                return;
+            }
+            SESSION.access_token = response.access_token;
+            SESSION.refresh_token = response.refresh_token;
+            vm.getThings();
         }).catch(function (error) {
             alert(error.message);
         });
     }
 
+    getThings = () => {
+        var vm = this;
+        const { navigate } = this.props.navigation;
+
+        ThingsSerivce.getThings().then(function(response) {
+            if (response.statusCode >= 400) return;
+            if (_.isEmpty(response)) return navigate('GatewaySetup');
+            return navigate('Status');
+        })
+    }
+
     render(){
         const {navigate} = this.props.navigation;
         return(
-                <Image style={STYLES.backgroundImageContainer} source={CONFIG.images.loginSplash}>
+                <Image style={CommonStyles.backgroundImageContainer} source={IMAGES.loginSplash}>
                     <ModalBox
                         onRequestClose={() => navigate('Login')}
                         isVisible={this.state.modalVisible}
@@ -128,7 +146,7 @@ class LoginScreen extends Component{
 
                     <View style={{flex:0.05}}/>
                     <View style={{flex:1, justifyContent:'flex-start'}}>
-                        <Image style={{margin:50, backgroundColor:'transparent'}} source={CONFIG.images.logo}/>
+                        <Image style={{margin:50, backgroundColor:'transparent'}} source={IMAGES.logo}/>
 
                         <TextBox
                             onChangeText={(text) => this.setState({username: text})}
@@ -147,7 +165,7 @@ class LoginScreen extends Component{
 
                         <TouchableOpacity 
                             onPress = {() => navigate('ForgotPassword')}
-                            title = "Forgot Passord?"><Text style={STYLES.linkText}>Forgot password?</Text>
+                            title = "Forgot Passord?"><Text style={CommonStyles.linkText}>Forgot password?</Text>
                         </TouchableOpacity>
 
                         <View style={{

@@ -1,21 +1,24 @@
 import React, { 
-    Component 
+    Component
 } from 'react';
 import {
-  Text,
-  View,
-  TouchableOpacity
+    Text,
+    View,
+    TouchableOpacity
 } from 'react-native';
 import {
-  StackNavigator
+    StackNavigator
 } from 'react-navigation';
 import {
     TouchButton,
-    TextBox
+    TextBox,
+    CommonStyles
 } from './../components/index';
+import {
+    ThingsSerivce
+} from './../lib/index';
 import Hr from 'react-native-hr';
-import STYLES from './../components/common-styles';
-import CONFIG from './../config/index';
+import _ from 'lodash';
 
 class GatewaySetup extends Component {
     static navigationOptions = {header: null};
@@ -29,15 +32,27 @@ class GatewaySetup extends Component {
             showInitHeader: true,
             showErrorHeader: false
         };
-        this.addGateway = this.addGateway.bind(this);
+        this.addGateway = _.debounce(this.addGateway.bind(this), 1000, {leading: true});
     }
 
     addGateway = () => {
+        var vm = this;
         const { navigate } = this.props.navigation;
         let { showInitHeader, showErrorHeader, gatewayName, gatewayId, location} = this.state;
 
-        navigate('SensorSetup')
-        // Add gateway POST call here
+        gatewayId = '4883C7DF3001191D';
+
+        vm.setState({showInitHeader: false});
+        ThingsSerivce.pairGateway(gatewayName, gatewayId).then(function(response) {
+            if (response.statusCode >= 400) {
+                vm.setState({showErrorHeader: true, showInitHeader: false});
+                setTimeout(() => {
+                    vm.setState({showErrorHeader: false, showInitHeader: true});
+                }, 2000);
+                return;
+            }
+            return navigate('SensorSetup', screenProps = {gateway: response});
+        })
     }
 
     getHeader = () => {
@@ -51,7 +66,7 @@ class GatewaySetup extends Component {
                     alignItems: 'center',
                     margin: 5
                 }}>
-                    <Text style={[STYLES.white, STYLES.textHeader ]}>SET UP GATEWAY</Text>
+                    <Text style={[CommonStyles.white, CommonStyles.textHeader ]}>SET UP GATEWAY</Text>
                 </View>
             );
         if (!showInitHeader && !showErrorHeader)
@@ -92,7 +107,7 @@ class GatewaySetup extends Component {
 
     render() {
         return (
-            <View style={STYLES.background}>
+            <View style={CommonStyles.background}>
                 {this.getHeader()}
 
                 <View style={{
@@ -115,11 +130,9 @@ class GatewaySetup extends Component {
                 <View style={{
                     flex: 0.75
                 }}>
-
                     <TextBox
                         onChangeText = {(text) => this.setState({gatewayName: text})}
                         placeholder = 'Gateway Name'/>
-
                     <TextBox 
                         onChangeText = {(text) => this.setState({gatewayId: text})} 
                         placeholder='Gateway ID' />
@@ -127,7 +140,6 @@ class GatewaySetup extends Component {
                         onChangeText = {(text) => this.setState({location: text})} 
                         placeholder='Location' />
                 </View>
-
 
                 <View style={{flex:0.15}}>
                     <TouchButton

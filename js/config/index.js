@@ -1,9 +1,7 @@
-import images from './images';
-import session from './session';
-import settings from './settings';
+import IMAGES from './images';
+import SESSION from './session';
+import SETTINGS from './settings';
 
-export default CONFIG = {
-    images: images,
-    session: session,
-    settings: settings
-}
+export { IMAGES };
+export { SESSION };
+export { SETTINGS };

@@ -1,5 +1,5 @@
 import React, { 
-    Component 
+  Component
 } from 'react';
 import {
   Text,
@@ -10,49 +10,65 @@ import {
   StackNavigator
 } from 'react-navigation';
 import {
-    TouchButton,
-    TextBox
+  TouchButton,
+  TextBox,
+  CommonStyles
 } from './../components/index';
+import {
+  ThingsSerivce
+} from './../lib/index';
 import Hr from 'react-native-hr';
-import STYLES from './../components/common-styles';
 
 class SensorSetup extends Component {
   static navigationOptions = {header: null};
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       sensorName: '',
       sensordId: '',
       min: '',
       max: '',
       unit: '',
-      location: ''
+      location: '',
+      gateway: props.navigation.state.params.gateway
     };
     this.addSensor = this.addSensor.bind(this);
   }
 
   addSensor = () => {
     const { navigate } = this.props.navigation;
-
     let {
       sensorName,
       sensordId,
       min,
       max,
       unit,
-      location
+      location,
+      gateway
     } = this.state
 
+    sensorId = 'a5f336a8-8c18-11e6-ae22-56b6b6499611';
 
-    navigate('Status');
+    let thing = {};
+    thing.name = sensorName;
+    thing.device_type_id = sensorId;  // Is device tye id === sensor id ?
+    thing.parent_id = gateway.id;
+    thing.properties = {
+      channel: 0
+    }
+    thing.active = 1;
+    thing.status = 'ACTIVATED';
 
-    // Add sensor POST call here
+    ThingsSerivce.addThing(thing).then(function(response) {
+      if (response.statusCode >= 400) return;
+      return navigate('Status');
+    });
   }
 
   render() {
     return (
-      <View style={STYLES.background}>
+      <View style={CommonStyles.background}>
             <View style={{
                 flex: .05,
                 justifyContent: 'center',
@@ -60,7 +76,7 @@ class SensorSetup extends Component {
                 alignItems: 'center',
                 margin: 5
             }}>
-                <Text style={[STYLES.white, STYLES.textHeader ]}>SET UP SENSOR</Text>
+                <Text style={[CommonStyles.white, CommonStyles.textHeader ]}>SET UP SENSOR</Text>
             </View>
             <View style={{
                 flex: 0.05
@@ -78,7 +94,6 @@ class SensorSetup extends Component {
             </View>
 
             <Hr lineColor='#b3b3b3' textColor='steelblue' />
-
 
             <View style={{
                 flex: 0.75

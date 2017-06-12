@@ -1,5 +1,5 @@
 import React, { 
-    Component 
+    Component
 } from 'react';
 import {
   View,
@@ -9,9 +9,9 @@ import {
   StackNavigator
 } from 'react-navigation';
 import {
-    TextBox
+    TextBox,
+    CommonStyles
 } from './../components/index';
-import STYLES from './../components/common-styles';
 import Hr from 'react-native-hr';
 
 class Status extends Component {
@@ -19,33 +19,39 @@ class Status extends Component {
     constructor() {
         super();
         this.state = {
-
         }
     }
 
     render() {
         return (
-            <View style={STYLES.background}>
+            <View style={CommonStyles.background}>
                 <View style={{
                     flex: .05,
                     justifyContent: 'center',
                     flexDirection: 'column',
                     alignItems: 'center',
                     margin: 10 }}>
-                        <Text style={[STYLES.white, STYLES.textHeader ]}>STATUS</Text>
-                        <Text style={[STYLES.white, {position: 'absolute', right: 0, fontSize: 30, fontWeight: 'bold'}]}>+</Text>
+                        <Text style={[CommonStyles.white, CommonStyles.textHeader ]}>STATUS</Text>
+                        <Text style={[CommonStyles.white, {position: 'absolute', right: 0, fontSize: 30, fontWeight: 'bold'}]}>+</Text>
                 </View>
 
                 <Hr lineColor='#b3b3b3' textColor='steelblue' />
 
                 <View style={{ flex: 0.95}}>
 
-                </View>
 
+
+
+
+
+
+
+
+
+                </View>
             </View>
         )
     }
-
 }
 
 module.exports = Status;

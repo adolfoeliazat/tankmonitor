@@ -2,18 +2,17 @@ import {
     APP_KEY,
     APP_SECRET,
     AUTH_HOST,
-    REDIRECT_URI
+    REDIRECT_URI,
+    THINGS_HOST
 } from 'react-native-dotenv';
 
 const settings = {
     appKey: APP_KEY,
     appSecret: APP_SECRET,
     authHost: AUTH_HOST,
-    redirect_uri: REDIRECT_URI,
-    accessToken: '',
     getLoginUri: getLoginUri,
-    state: '',
-    guid: guid
+    guid: guid,
+    thingsHost: THINGS_HOST
 }
 
 /**
@@ -23,7 +22,7 @@ const settings = {
  * @returns {String}
  */
 function getLoginUri() {
-    return settings.authHost + 'oauth/authorization?redirect_uri=' + settings.redirect_uri + '&client_id=' + settings.appKey + '&state=' + settings.state + '&response_type=token';
+    return settings.authHost + 'oauth/authorization?redirect_uri=' + REDIRECT_URI + '&client_id=' + settings.appKey + '&state=' + settings.state + '&response_type=token';
 }
 
 /**

@@ -12,11 +12,15 @@ import _ from 'lodash';
 import {
     TouchButton,
     TextBox,
-    ModalBox
+    ModalBox,
+    CommonStyles
 } from './../components/index';
-import authService from '../lib/authentication';
-import CONFIG from '../config/index';
-import STYLES from '../components/common-styles';
+import {
+    AuthService
+} from '../lib/index';
+import {
+    IMAGES
+} from './../config/index';
 
 class ForgotPassword extends Component {
     static navigationOptions = {header: null};
@@ -37,7 +41,7 @@ class ForgotPassword extends Component {
         if (email.search('@') === -1) return; 
 
         this.setState({ modalVisible: true });
-        authService.forgotPassword(email.trim()).then(function(response) {
+        AuthService.forgotPassword(email.trim()).then(function(response) {
             console.log(response);
         }).catch(function(error) {
             alert(error.message);
@@ -47,7 +51,7 @@ class ForgotPassword extends Component {
     render() {
         const {navigate} = this.props.navigation;
         return (
-                <Image style={STYLES.backgroundImageContainer} source={CONFIG.images.loginSplash}>
+                <Image style={CommonStyles.backgroundImageContainer} source={IMAGES.loginSplash}>
                     <ModalBox
                         onRequestClose={() => navigate('Login')}
                         isVisible={this.state.modalVisible}
@@ -63,9 +67,9 @@ class ForgotPassword extends Component {
                         justifyContent: 'center',
                         alignItems: 'center',
                     }}>
-                        <Image style={{margin:40, backgroundColor:'transparent'}} source={CONFIG.images.logo}/>
-                        <Text style={STYLES.screenText}>Forgot your password?</Text>
-                        <Text style={STYLES.screenText}>Enter your email address below and we'll send you instructions for how to reset your password</Text>
+                        <Image style={{margin:40, backgroundColor:'transparent'}} source={IMAGES.logo}/>
+                        <Text style={CommonStyles.screenText}>Forgot your password?</Text>
+                        <Text style={CommonStyles.screenText}>Enter your email address below and we'll send you instructions for how to reset your password</Text>
                     </View>
 
                     <View style={{flex:0.5}}>
@@ -83,7 +87,7 @@ class ForgotPassword extends Component {
 
                         <TouchableOpacity 
                             onPress = {() => navigate('Login')}
-                            title = "Cancel"><Text style={STYLES.linkText}>Cancel</Text>
+                            title = "Cancel"><Text style={CommonStyles.linkText}>Cancel</Text>
                         </TouchableOpacity>
                     </View>
                 </Image>
