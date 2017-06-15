@@ -3,7 +3,8 @@ import settings from '../config/settings';
 // Methods
 var Service = {
     getToken: getToken,
-    forgotPassword: forgotPassword
+    forgotPassword: forgotPassword,
+    getOauth: getOauth
 }
 
 /**
@@ -41,6 +42,31 @@ function getToken(email, password) {
             email: email,
             password: password,
             grant_type: 'password',
+        })
+    })
+    .then((response) => {
+        return response.json();
+    })
+    .catch((error) => {
+        throw error;
+    })
+}
+
+/**
+ * Gets oauth token using auth code, app id, app secret
+ * 
+ * @param {String} authCode
+ */
+function getOauth(authCode) {
+    return fetch(getHost() + 'oauth/token', {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify({
+            client_id: settings.appKey,
+            client_secret: settings.appSecret,
+            code: authCode,
+            grant_type: "authorization_code",
+            redirect_uri: settings.explicitUrl
         })
     })
     .then((response) => {

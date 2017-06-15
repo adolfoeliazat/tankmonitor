@@ -17,7 +17,7 @@ import {
     Instructions
 } from './../components/index';
 import {
-    ThingsSerivce
+    PlatformService
 } from './../lib/index';
 import {
     IMAGES
@@ -50,21 +50,17 @@ class GatewaySetup extends Component {
         const { navigate } = this.props.navigation;
         let { showInitHeader, showErrorHeader, gatewayName, gatewayId, location} = this.state;
 
-        gatewayId = '4883C7DF3001191D';
-
-        return navigate('SensorSetup', screenProps = {gateway: 'hello'});
-
-        // vm.setState({showInitHeader: false});
-        // ThingsSerivce.pairGateway(gatewayName, gatewayId).then(function(response) {
-        //     if (response.statusCode >= 400) {
-        //         vm.setState({showErrorHeader: true, showInitHeader: false});
-        //         setTimeout(() => {
-        //             vm.setState({showErrorHeader: false, showInitHeader: true});
-        //         }, 2000);
-        //         return;
-        //     }
-        //     return navigate('SensorSetup', screenProps = {gateway: response});
-        // })
+        vm.setState({showInitHeader: false});
+        PlatformService.pairGateway(gatewayName, gatewayId).then(function(response) {
+            if (response.statusCode >= 400) {
+                vm.setState({showErrorHeader: true, showInitHeader: false});
+                setTimeout(() => {
+                    vm.setState({showErrorHeader: false, showInitHeader: true});
+                }, 2000);
+                return;
+            }
+            return navigate('SensorSetup', screenProps = {gateway: response});
+        })
     }
 
     getHeader = () => {
@@ -149,10 +145,6 @@ class GatewaySetup extends Component {
                         style={{height: 50}}
                         onChangeText = {(text) => this.setState({gatewayId: text})} 
                         placeholder='Gateway ID' />
-                    <TextBox
-                        style={{height: 50}}
-                        onChangeText = {(text) => this.setState({location: text})} 
-                        placeholder='Location' />
                 </View>
 
                 <View style={{flex:0.15}}>

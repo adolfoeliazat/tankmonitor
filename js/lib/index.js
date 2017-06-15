@@ -1,5 +1,5 @@
 import AuthService from './auth.service';
-import ThingsSerivce from './things.service';
+import PlatformService from './platform.service';
 
 export { AuthService };
-export { ThingsSerivce };
+export { PlatformService };

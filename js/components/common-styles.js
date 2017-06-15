@@ -51,7 +51,7 @@ export default StyleSheet.create({
         flex: 1,
         width: undefined,
         height: undefined,
-        backgroundColor: '#000020',
+        backgroundColor: '#3A4950',
     },
     textHeader: {
         width: 100,
@@ -59,5 +59,14 @@ export default StyleSheet.create({
     },
     white: {
         color: '#FFFFFF'
+    },
+
+
+
+    sensorBackground: {
+        flex: 1,
+        width: undefined,
+        height: undefined,
+        backgroundColor: '#000050',
     },
 })

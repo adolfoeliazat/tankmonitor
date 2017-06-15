@@ -16,7 +16,7 @@ var Service = {
  * @returns {String}
  */
 function getHost() {
-    return settings.thingsHost;
+    return settings.apiHost;
 }
 
 /**

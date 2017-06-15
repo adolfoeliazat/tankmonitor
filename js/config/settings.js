@@ -2,27 +2,38 @@ import {
     APP_KEY,
     APP_SECRET,
     AUTH_HOST,
-    REDIRECT_URI,
-    THINGS_HOST
+    IMPLICIT_REDIRECT_URI,
+    EXPLICIT_REDIRECT_URI,
+    API_HOST
 } from 'react-native-dotenv';
 
 const settings = {
     appKey: APP_KEY,
     appSecret: APP_SECRET,
     authHost: AUTH_HOST,
-    getLoginUri: getLoginUri,
+    getImplicitLogin: getImplicitLogin,
+    getExplicitLogin: getExplicitLogin,
     guid: guid,
-    thingsHost: THINGS_HOST
+    apiHost: API_HOST,
+    explicitUrl: EXPLICIT_REDIRECT_URI
 }
 
 /**
- * Construct Cayenne API URI
+ * Construct Cayenne Implicit URL
  * 
- * @param {String} state 
  * @returns {String}
  */
-function getLoginUri() {
-    return settings.authHost + 'oauth/authorization?redirect_uri=' + REDIRECT_URI + '&client_id=' + settings.appKey + '&state=' + settings.state + '&response_type=token';
+function getImplicitLogin() {
+    return settings.authHost + 'oauth/authorization?redirect_uri=' + encodeURI(IMPLICIT_REDIRECT_URI) + '&client_id=' + settings.appKey + '&state=' + settings.state + '&response_type=token';
+}
+
+/**
+ * Construct Cayenne Explicit URL
+ * 
+ * @returns {String}
+ */
+function getExplicitLogin() {
+    return settings.authHost + 'oauth/authorization?redirect_uri=' + encodeURI(EXPLICIT_REDIRECT_URI) + '&client_id=' + settings.appKey + '&state=' + settings.state + '&response_type=code';
 }
 
 /**
