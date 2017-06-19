@@ -21,7 +21,7 @@ class Alerts extends Component {
         const {navigate} = this.props.navigation;
         return (
             <View style={[CommonStyles.background, {flex: 1}]}>
-                <Header title='ALERTS' navigation={this.props.navigation} visible={true} onPress = {() => navigate('SensorSetup', screenProps = {gateway: 'ping'})}/>
+                <Header title='ALERTS' navigation={this.props.navigation} visible={true} onPress = {() => navigate('SensorSetup', screenProps = {gateway: 'alerts'})}/>
 
                 <ScrollView style={{flex: 0.85}}>
                     <View style={{ flex: 1}}>

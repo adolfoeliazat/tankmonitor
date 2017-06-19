@@ -6,4 +6,4 @@ import {
 } from 'react-navigation';
 import ROUTES from './js/routes/router';
 
-AppRegistry.registerComponent('tankmonitor', () => ROUTES);
+AppRegistry.registerComponent('CayenneSampleApp', () => ROUTES);

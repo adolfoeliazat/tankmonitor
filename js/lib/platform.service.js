@@ -7,7 +7,8 @@ import session from '../config/session';
 var Service = {
     getThings: getThings,
     pairGateway: pairGateway,
-    addThing: addThing
+    addThing: addThing,
+    createClient: createClient
 }
 
 /**
@@ -93,5 +94,24 @@ function addThing(thing) {
         throw error;
     })
 }
+
+/**
+ * Create a MQTT client credentials
+ * 
+ * @returns {*}
+ */
+function createClient() {
+    return fetch(getHost() + 'clients', {
+        method: 'POST',
+        headers: getHeaders()
+    })
+    .then((response) => {
+        return response.json();
+    })
+    .catch((error) => {
+        throw error;
+    })
+}
+
 
 export default Service;

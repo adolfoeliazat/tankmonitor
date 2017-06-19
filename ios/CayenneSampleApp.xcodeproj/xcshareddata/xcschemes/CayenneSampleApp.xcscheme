@@ -29,9 +29,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "tankmonitor.app"
-               BlueprintName = "tankmonitor"
-               ReferencedContainer = "container:tankmonitor.xcodeproj">
+               BuildableName = "CayenneSampleApp.app"
+               BlueprintName = "CayenneSampleApp"
+               ReferencedContainer = "container:CayenneSampleApp.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -43,9 +43,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "tankmonitorTests.xctest"
-               BlueprintName = "tankmonitorTests"
-               ReferencedContainer = "container:tankmonitor.xcodeproj">
+               BuildableName = "CayenneSampleAppTests.xctest"
+               BlueprintName = "CayenneSampleAppTests"
+               ReferencedContainer = "container:CayenneSampleApp.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -61,9 +61,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "tankmonitorTests.xctest"
-               BlueprintName = "tankmonitorTests"
-               ReferencedContainer = "container:tankmonitor.xcodeproj">
+               BuildableName = "CayenneSampleAppTests.xctest"
+               BlueprintName = "CayenneSampleAppTests"
+               ReferencedContainer = "container:CayenneSampleApp.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -71,9 +71,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "tankmonitor.app"
-            BlueprintName = "tankmonitor"
-            ReferencedContainer = "container:tankmonitor.xcodeproj">
+            BuildableName = "CayenneSampleApp.app"
+            BlueprintName = "CayenneSampleApp"
+            ReferencedContainer = "container:CayenneSampleApp.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -94,9 +94,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "tankmonitor.app"
-            BlueprintName = "tankmonitor"
-            ReferencedContainer = "container:tankmonitor.xcodeproj">
+            BuildableName = "CayenneSampleApp.app"
+            BlueprintName = "CayenneSampleApp"
+            ReferencedContainer = "container:CayenneSampleApp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -113,9 +113,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "tankmonitor.app"
-            BlueprintName = "tankmonitor"
-            ReferencedContainer = "container:tankmonitor.xcodeproj">
+            BuildableName = "CayenneSampleApp.app"
+            BlueprintName = "CayenneSampleApp"
+            ReferencedContainer = "container:CayenneSampleApp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

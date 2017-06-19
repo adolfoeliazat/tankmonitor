@@ -7,6 +7,7 @@ import {
     API_HOST
 } from 'react-native-dotenv';
 
+
 const settings = {
     appKey: APP_KEY,
     appSecret: APP_SECRET,

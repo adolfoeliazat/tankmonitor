@@ -51,6 +51,7 @@ Successful response will respond with the following:
 }
 ```
 *Note: name and description currently have default values during Beta release
+
 3. Update your application's redirect_uri as the sample app will use this to deep link
 Example POST application call
 ```
@@ -67,15 +68,17 @@ Successful response:
 }
 ```
 Repeat this step for `tankmonitor://explicit` and any other redirect URIs your application will need.
-I also recommend adding `http://example.com/redirect` as an additional redirect URI to get your oAuth2 token using the following link:
+
+You can also add `http://example.com/redirect` as an additional redirect URI to get your oAuth2 token using the following link:
 ```
 https://auth.mydevices.com/oauth/authorization?redirect_uri=https%3A%2F%2Fexample.com%2Fredirect&client_id=YOUR APP ID&response_type=token&state=0123456789
 ```
-You will be taken to a login page and after a successful login, you'll be redirect to `https://example.com/redirect#access_token=YOUR ACCESS TOKEN&state=0123456789`
+You will be taken to a login page and after a successful login, you'll be redirect to `http://example.com/redirect#access_token=YOUR ACCESS TOKEN&state=0123456789`
 
 You can then use this access token to add things under your application. 
+
 4. With all the proper redirect links, you are now able to log into the sample app using either Explicit or Implicit login and you will be redirected to the sample app via deep linking after a successful login.
-    - Note: Logging in using the email/password combo on the login screen will allow give you a token and view all your devices under your Cayenne account. Using the oAuth2 token will allow you to only view all the devices under your application account.
+    - Note: Logging in using the email/password combo on the login screen will give you a token and allow you to view all your devices under your Cayenne account. Using the oAuth2 token will allow you to only view all the devices under your application account.
 
 ## Preprovisioning
 The sample app goes over pairing a Gateway and Sensor to a user's account but before doing so, the device must be pre-provisioned. 
@@ -91,9 +94,9 @@ The sample app goes over pairing a Gateway and Sensor to a user's account but be
     "manufacturer": "Example Inc.",
     "parent_constraint": "NOT_ALLOWED",
     "child_constraint": "ALLOWED",
-    "category": "",
-    "subcategory": "",
-    "transport_protocol": ""
+    "category": "module",
+    "subcategory": "lora",
+    "transport_protocol": "mqtt"
 }
 ```
 
@@ -106,9 +109,9 @@ And with an example sensor gateway payload:
     "manufacturer": "Example Inc.",
     "parent_constraint": "ALLOWED",
     "child_constraint": "ALLOWED",
-    "category": "module",
+    "category": "sensor",
     "subcategory": "lora",
-    "transport_protocol": "lorawan"
+    "transport_protocol": "mqtt"
 }
 ```
 
@@ -120,7 +123,6 @@ Upon a successful request, you will receive a payload response with an "id" valu
 {
 {
   "hardware_id": "YOUR UNIQUE HARDWARE ID",
-  "codec": "YOUR CODEC",
   "application_id": "YOUR APP ID",
   "device_type_id": "YOUR DEVICE TYPE ID (Step 1)",
   "response_csv": false
@@ -131,7 +133,6 @@ Upon a successful request, you will receive a payload response with an "id" valu
 - `/things/registry/batch` payload:
 ```
 {
-  "codec": "YOUR CODEC",
   "device_type_id": "YOUR DEVICE TYPE ID (Step 1)",
   "hardware_ids": [
     "YOUR UNIQUE HARDWARE IDs"

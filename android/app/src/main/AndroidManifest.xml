@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.tankmonitor"
+    package="com.cayennesampleapp"
     android:versionCode="1"
     android:versionName="1.0">
 
@@ -30,8 +30,8 @@
             <action android:name="android.intent.action.VIEW" />
             <category android:name="android.intent.category.DEFAULT" />
             <category android:name="android.intent.category.BROWSABLE" />
-            <data android:scheme="tankmonitor" android:host="implicit" />
-            <data android:scheme="tankmonitor" android:host="explicit" />
+            <data android:scheme="sample" android:host="implicit" />
+            <data android:scheme="sample" android:host="explicit" />
         </intent-filter>
 
       </activity>

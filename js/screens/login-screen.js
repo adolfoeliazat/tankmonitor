@@ -86,7 +86,7 @@ class LoginScreen extends Component{
             if(_.isNil(SESSION.access_token)) return; 
             vm.getThings();
         }
-        // Sample app usage only, use implicit login with mobile apps
+        // Sample app usage only, use implicit login with mobile apps and single page applications
         else {
             var authCode = routeName.match(/code=(.*?)&/i)[1];
             if(_.isNil(authCode)) return;
@@ -138,11 +138,17 @@ class LoginScreen extends Component{
         var vm = this;
         const { navigate } = this.props.navigation;
 
-        PlatformService.getThings().then(function(response) {
-            if (response.statusCode >= 400) return;
-            if (_.isEmpty(response)) return navigate('GatewaySetup');
-            return navigate('Status');
-        })
+        PlatformService.createClient().then(function(response) {
+            if (_.isEmpty(response)) return;
+            SESSION.mqqt_id = response.id;
+            SESSION.mqqt_secret = response.clear_secret;
+
+            PlatformService.getThings().then(function(response) {
+                if (response.statusCode >= 400) return;
+                if (_.isEmpty(response)) return navigate('GatewaySetup');
+                return navigate('Status');
+            });
+        });
     }
 
     render(){

@@ -1,4 +1,4 @@
-package com.tankmonitor;
+package com.cayennesampleapp;
 
 import android.app.Application;
 
