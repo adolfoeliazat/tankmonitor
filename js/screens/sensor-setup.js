@@ -23,6 +23,7 @@ import {
 import { 
   IMAGES
 } from './../config/index.js'
+import _ from 'lodash';
 import Hr from 'react-native-hr';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -59,11 +60,13 @@ class SensorSetup extends Component {
     let thing = {};
     thing.name = sensorName;
     // TODO: Find device type id by hardware id
-    thing.device_type_id = sensorId;
+    thing.device_type_id = 'f39b7b70-5131-11e7-b4cf-01fdf2fa57ad';
     thing.parent_id = gateway.id;
     thing.hardware_id = hardwareId;
     thing.properties = {
-      sampleAppProp1: 'sample property'
+      sampleAppProp1: 'sample property',
+      deveui: hardwareId,
+      network: 'ttn'
     }
     thing.active = 1;
     thing.status = 'ACTIVATED';

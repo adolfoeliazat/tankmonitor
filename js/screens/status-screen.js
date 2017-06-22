@@ -31,6 +31,7 @@ class Status extends Component {
             sensors: {}
         }
         this.getThings = this.getThings.bind(this);
+        this.deleteThing = this.deleteThing.bind(this);
         this.getThings();
     }
 
@@ -43,12 +44,20 @@ class Status extends Component {
         })
     }
 
+    deleteThing = (thingId) => {
+        var vm = this;
+        PlatformService.deleteThing(thingId).then(function(response) {
+            console.log('Deleted!');
+        })
+    }
+
     thingList = () => {
+        var vm = this;
         let { sensors } = this.state;
         if (_.isEmpty(sensors)) return;
         var sensorList = sensors.map(function(sensor) {
             return (
-                <TouchableOpacity activeOpacity = {0.8} style={{flex: 0.20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', margin: 5, padding: 15, borderRadius: 5, backgroundColor: '#405159'}}>
+                <TouchableOpacity activeOpacity = {0.8} style={{flex: 0.20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', margin: 5, padding: 15, borderRadius: 5, backgroundColor: '#405159'}} onPress = {() => {vm.deleteThing(sensor.id)}}>
                         <View style={{flex: 0.40, justifyContent: 'center', alignItems: 'flex-start', flexDirection: 'column'}}>
                             <Text style={{color: 'white'}}>{sensor.name}</Text>
                         </View>
@@ -74,7 +83,7 @@ class Status extends Component {
         const {navigate} = this.props.navigation;
         return (
             <View style={[CommonStyles.background, {flex: 1}]}>
-                <Header title='STATUS' navigation={this.props.navigation} visible={true} onPress = {() => navigate('SensorSetup', screenProps = {gateway: null})}/>
+                <Header title='STATUS' navigation={this.props.navigation} visible={true} onPress = {() => navigate('GatewaySetup')}/>
                 <ScrollView style={{flex: 0.85}}>
                     <View style={{ flex: 1}}>
                         {this.thingList()}

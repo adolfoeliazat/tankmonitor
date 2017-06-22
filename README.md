@@ -6,11 +6,12 @@ This repo contains a sample app walking through the Authentication process along
 
 ## Prereqs
 1. Run `npm install` in root
-2. This app was built using React Native and a getting start guide can be found [here.](https://facebook.github.io/react-native/docs/getting-started.html)
+2. This app was built using React Native and a getting start guide can be found [here.](https://facebook.github.io/react-native/docs/getting-started.html#installing-dependencies)
     - Use your preferred React Native (I used [Visual Studio Code](https://code.visualstudio.com/) with React Native Tools plugin)
 3. Create or log into your Cayenne account at https://cayenne.mydevices.com/cayenne/login
 4. Obtain  your Cayenne Cloud API app key and secret by clicking the Create App button.
 5. Create an `.env` file using the `.env.example` file and input your app key/secret values
+    * Note, when making changes to `.env`, please edit `js/config/settings.js` with any blank line/whitespace as per react-native-dotenv [Troublshooting](https://github.com/zetachang/react-native-dotenv#troubleshooting)
 6. You should now be able to run the Sample App and land on the login screen (implicit/explicit logins will not work at this point)
 
 ## Updating Your Application
@@ -46,8 +47,8 @@ Successful response will respond with the following:
     "description": "This is a beta app created with Cayenne API",
     "secret": "YOUR APP SECRET",
     "status": "active",
-    "created_at": "",
-    "updated_at": ""
+    "updated_at": "YYYY-MM-DDTHH:MM:SS.mmmZ",
+    "created_at": "YYYY-MM-DDTHH:MM:SS.mmmZ"
 }
 ```
 *Note: name and description currently have default values during Beta release
@@ -55,23 +56,23 @@ Successful response will respond with the following:
 3. Update your application's redirect_uri as the sample app will use this to deep link
 Example POST application call
 ```
-curl -X POST -H 'Authorization: Bearer ACCESS_TOKEN' 'https://auth.mydevices.com/applications/{app id}/redirects' -d '{"redirect_uri": "tankmonitor://implicit"}'
+curl -X POST -H 'Authorization: Bearer ACCESS_TOKEN' 'https://auth.mydevices.com/applications/{app id}/redirects' -d '{"redirect_uri": "sample://implicit"}'
 ```
 Successful response:
 ```
 {
     "id": "YOUR REDIRECT ID",
     "app_id": "YOUR APP ID",
-    "redirect_uri": "tankmonitor://implicit",
+    "redirect_uri": "sample://implicit",
     "updated_at": "YYYY-MM-DDTHH:MM:SS.mmmZ",
     "created_at": "YYYY-MM-DDTHH:MM:SS.mmmZ"
 }
 ```
-Repeat this step for `tankmonitor://explicit` and any other redirect URIs your application will need.
+Repeat this step for `sample://explicit` and any other redirect URIs your application will need.
 
 You can also add `http://example.com/redirect` as an additional redirect URI to get your oAuth2 token using the following link:
 ```
-https://auth.mydevices.com/oauth/authorization?redirect_uri=https%3A%2F%2Fexample.com%2Fredirect&client_id=YOUR APP ID&response_type=token&state=0123456789
+https://auth.mydevices.com/oauth/authorization?redirect_uri=http%3A%2F%2Fexample.com%2Fredirect&client_id=YOUR APP ID&response_type=token&state=0123456789
 ```
 You will be taken to a login page and after a successful login, you'll be redirect to `http://example.com/redirect#access_token=YOUR ACCESS TOKEN&state=0123456789`
 
@@ -95,7 +96,7 @@ The sample app goes over pairing a Gateway and Sensor to a user's account but be
     "parent_constraint": "NOT_ALLOWED",
     "child_constraint": "ALLOWED",
     "category": "module",
-    "subcategory": "lora",
+    "subcategory": "mqtt",
     "transport_protocol": "mqtt"
 }
 ```
@@ -110,7 +111,7 @@ And with an example sensor gateway payload:
     "parent_constraint": "ALLOWED",
     "child_constraint": "ALLOWED",
     "category": "sensor",
-    "subcategory": "lora",
+    "subcategory": "mqtt",
     "transport_protocol": "mqtt"
 }
 ```
@@ -121,12 +122,10 @@ Upon a successful request, you will receive a payload response with an "id" valu
 - `things/registry` payload: 
 ```
 {
-{
   "hardware_id": "YOUR UNIQUE HARDWARE ID",
   "application_id": "YOUR APP ID",
   "device_type_id": "YOUR DEVICE TYPE ID (Step 1)",
   "response_csv": false
-}
 }
 ```
 

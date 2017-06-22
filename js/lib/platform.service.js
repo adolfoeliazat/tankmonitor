@@ -8,7 +8,8 @@ var Service = {
     getThings: getThings,
     pairGateway: pairGateway,
     addThing: addThing,
-    createClient: createClient
+    createClient: createClient,
+    deleteThing: deleteThing
 }
 
 /**
@@ -113,5 +114,22 @@ function createClient() {
     })
 }
 
+/**
+ * Delete a thing
+ * 
+ * @param {String} thingId
+ */
+function deleteThing(thingId) {
+    return fetch(getHost() + `things/${thingId}`, {
+        method: 'DELETE',
+        headers: getHeaders()
+    })
+    .then((response) => {
+        return response.json();
+    })
+    .catch((error) => {
+        throw error;
+    })
+}
 
 export default Service;

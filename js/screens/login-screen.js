@@ -104,7 +104,8 @@ class LoginScreen extends Component{
      * This will redirect to the authorization page and will use the redirect link provdided
      */
     cayenneApi =(loginType) => {
-        SETTINGS.state = SETTINGS.guid();
+        //SETTINGS.state = SETTINGS.guid();
+        SETTINGS.state = 'z';   // Hardcoded state
         var loginUrl = (loginType === 'implicit') ? SETTINGS.getImplicitLogin() : SETTINGS.getExplicitLogin();
         Linking.openURL(loginUrl)
             .then(supported => {})
